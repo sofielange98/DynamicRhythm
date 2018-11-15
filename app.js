@@ -15,6 +15,19 @@ var cookieParser = require('cookie-parser');
 
 //app.set('view engine', 'pug');
 
+var pgp = require('pg-promise')();
+
+const dbConfig = { // CHANGE TO YOUR LOCAL INFO
+   host: 'localhost',
+   port: 5432,
+   database: 'dynamic_rhythm',
+   user: 'sofielange98',
+   password: '' // TODO: Fill in your PostgreSQL password here.
+                // Use empty string if you did not set a password
+};
+
+var db = pgp(dbConfig);
+
 var client_id = '7da0ba282d734fe0ac365644200242a0'; // Your client id
 var client_secret = '4e93e5aa845c4501a8cb91ded16dd84e'; // Your secret
 var redirect_uri = 'http://localhost:8888/callback/'; // Your redirect uri
@@ -64,6 +77,33 @@ app.get('/login', function(req, res) {
     }));
 });
 
+function addNewUser(user){
+
+  db.any('SELECT count(*) from users where id = $1', [user.id])
+    .then(data=>{
+      console.log(data),
+      console.log(data[0].count);
+      if(data[0].count >= 1){
+        console.log('User already in database')
+      }
+      else { //add user to database if they aren't already in there
+      var query =
+      'INSERT INTO users(id, email, name, country, uri) VALUES($1, $2, $3, $4, $5)'
+      db.one( query, [user.id, user.email, user.display_name, user.country, user.uri])
+        .then(data => {
+          console.log(data.id); // print new user id;
+        })
+        .catch(function(error){
+          console.log('woopsie!');
+        })
+      }
+    })
+    .catch(function(error){
+      console.log('error')
+    })
+
+}
+
 app.get('/callback', function(req, res) {
 
   // your application requests refresh and access tokens
@@ -108,7 +148,10 @@ app.get('/callback', function(req, res) {
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
           console.log(body);
-        });
+          var user = body;
+          console.log(user.email);
+          console.log(user.id);
+          addNewUser(body);        });
 
         // we can also pass the token to the browser to make requests from there
         res.redirect('/#' +
@@ -152,7 +195,7 @@ app.get('/refresh_token', function(req, res) {
 
 /*const { createAudio } = require('node-mp3-player')
 const Audio = createAudio();
- 
+
 (async () => {
   const myFile = await Audio(`${__dirname}/mp3/foo.mp3`)
   await myFile.volume(0.5)
