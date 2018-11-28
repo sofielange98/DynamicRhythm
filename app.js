@@ -12,7 +12,7 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-
+var bodyParser = require('body-parser')
 //app.set('view engine', 'pug');
 
 var pgp = require('pg-promise')();
@@ -209,27 +209,19 @@ const Audio = createAudio();
 })()
 */
 
-/*
-var flash = require('express-flash');
-var session = require('express-session');
-app.use(cookieParser('dynamicRhythm'));
-app.use(
-  session({
-    secret: 'dynamicRhythm',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 60000
-    },
-  })
-);
-app.use(flash());
-var index = require('./routes/index')
-app.use('/', index);
-var port = process.env.PORT;
-app.listen(port, function () {
-  console.log('Server running on http://localhost:'.concat(port));
-})
-*/
-console.log('Listening on 8888');
+
+var path = require("path");
+const index = require('./routes/index')
+app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'pug');
+app.use(express.static('node_modules'));
+app.use(express.static('dynamic/assets'));
+app.use(express.static('views'))
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
+app.use('/index', index)
+
 app.listen(8888);

@@ -4,23 +4,28 @@
   "description": "CU Project",
   "main": "app.js",
   "scripts": {
-    "start": "node app"
+    "start": "node app.js"
   },
   "author": "Xingyu Zhou",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect": "^3.6.6",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-flash": "0.0.2",
     "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
     "node-mp3-player": "^1.0.3",
     "nodemon": "^1.18.5",
+    "path": "^0.12.7",
     "pg": "^7.5.0",
     "pg-promise": "^8.5.1",
     "pug": "^2.0.3",
     "request": "^2.88.0",
+    "serve-static": "^1.13.2",
     "spotify-web-api-node": "^4.0.0"
   }
 }
