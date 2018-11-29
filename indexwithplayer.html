@@ -3,10 +3,10 @@
   <head>
     <title>DynamicRhythm</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="shortcut icon" href="img/favicon.ico"/> 
+    <link rel="shortcut icon" href="img/favicon.ico"/>
     <style type="text/css">
       #login, #loggedin {
-        display: block;  
+        display: block;
         float: right;
       }
       .text-overflow {
@@ -28,6 +28,10 @@
         </div>
         <div id="oauth">
         </div>
+        <p>If everything is set up properly, you should hear some music!</p>
+        <img id="current-track"/>
+        <h3 id="current-track-name"></h3>
+        <script src="https://sdk.scdn.co/spotify-player.js"></script>
         <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
       </div>
     </div>
@@ -60,11 +64,26 @@
       </dl>
     </script>
 
+  <!--  <script id="play" type="text/x-handlebars-template">
+        <ul>
+          {{#each objects}}
+            <li>{{name}} image <img src = "{{img_url}}"></li>
+            {{/each}}
+        </ul>
+      </script>!-->
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+<!-- Include the Web Playback SDK -->
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+
     <script>
       (function() {
-
         /**
          * Obtains parameters from the hash of the URL
          * @return Object
@@ -78,21 +97,16 @@
           }
           return hashParams;
         }
-
         var userProfileSource = document.getElementById('user-profile-template').innerHTML,
             userProfileTemplate = Handlebars.compile(userProfileSource),
             userProfilePlaceholder = document.getElementById('user-profile');
-
         var oauthSource = document.getElementById('oauth-template').innerHTML,
             oauthTemplate = Handlebars.compile(oauthSource),
             oauthPlaceholder = document.getElementById('oauth');
-
         var params = getHashParams();
-
         var access_token = params.access_token,
             refresh_token = params.refresh_token,
             error = params.error;
-
         if (error) {
           alert('There was an error during the authentication');
         } else {
@@ -102,25 +116,66 @@
               access_token: access_token,
               refresh_token: refresh_token
             });
-
             $.ajax({
                 url: 'https://api.spotify.com/v1/me',
                 headers: {
                   'Authorization': 'Bearer ' + access_token
                 },
                 success: function(response) {
+                  console.log(response.body)
                   userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-
                   $('#login').hide();
                   $('#loggedin').show();
                 }
             });
+            let _token = access_token;
+
+            // Set up the Web Playback SDK
+
+            window.onSpotifyPlayerAPIReady = () => {
+              const player = new Spotify.Player({
+                name: 'Web Playback SDK Template',
+                getOAuthToken: cb => { cb(_token); }
+              });
+
+              player.on('playback_error', e => console.error(e));
+
+              // Playback status updates
+              player.on('player_state_changed', state => {
+                console.log(state)
+                $('#current-track').attr('src', state.track_window.current_track.album.images[0].url);
+                $('#current-track-name').text(state.track_window.current_track.name);
+              });
+
+              // Ready
+              player.on('ready', data => {
+                console.log('Ready with Device ID', data.device_id);
+
+                // Play a track using our new device ID
+                play(data.device_id);
+              });
+
+              // Connect to the player!
+              player.connect();
+            }
+
+            // Play a specified track on the Web Playback SDK's device ID
+            function play(device_id) {
+              $.ajax({
+               url: "https://api.spotify.com/v1/me/player/play?device_id=" + device_id,
+               type: "PUT",
+               data: '{"uris": ["spotify:track:4lxARfM2hBMQzt3CVxvDpS"]}',
+               beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + _token );},
+               success: function(data) {
+                 console.log(data)
+               }
+              });
+            }
           } else {
               // render initial screen
               $('#login').show();
               $('#loggedin').hide();
           }
-
           document.getElementById('obtain-new-token').addEventListener('click', function() {
             $.ajax({
               url: '/refresh_token',

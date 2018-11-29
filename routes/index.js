@@ -1,9 +1,11 @@
 var express = require('express');
 var app = express();
+const router = express.Router();
 
-app.get('/', function (request, response) {
-   // render the views/index.ejs template file
-   response.render('index', {title: 'DynamicRhythm'})
+router.get('/', function (req, res) {
+   res.render('index.html', {
+      title: 'DynamicRhythm'
+   })
 });
 
 module.exports = app;
