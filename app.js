@@ -18,12 +18,12 @@ var cookieParser = require('cookie-parser');
 var pgp = require('pg-promise')();
 
 const dbConfig = { // CHANGE TO YOUR LOCAL INFO
-   host: 'localhost',
-   port: 2000,
-   database: 'dynamic_rhythm',
-   user: 'sofielange98',
-   password: '' // TODO: Fill in your PostgreSQL password here.
-                // Use empty string if you did not set a password
+  host: 'localhost',
+  port: 2000,
+  database: 'dynamic_rhythm',
+  user: 'sofielange98',
+  password: '' // TODO: Fill in your PostgreSQL password here.
+  // Use empty string if you did not set a password
 };
 
 var db = pgp(dbConfig);
@@ -42,7 +42,7 @@ var redirect_uri = 'http://localhost:8888/callback/'; // Your redirect uri
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
-var generateRandomString = function(length) {
+var generateRandomString = function (length) {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -57,10 +57,10 @@ var stateKey = 'spotify_auth_state';
 var app = express();
 
 app.use(express.static(__dirname + '/public'))
-   .use(cors())
-   .use(cookieParser());
+  .use(cors())
+  .use(cookieParser());
 
-app.get("/login", function(req, res) {
+app.get("/login", function (req, res) {
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
@@ -77,34 +77,33 @@ app.get("/login", function(req, res) {
     }));
 });
 
-function addNewUser(user){
+function addNewUser(user) {
 
   db.any('SELECT count(*) from users where id = $1', [user.id])
-    .then(data=>{
+    .then(data => {
       console.log(data),
-      console.log(data[0].count);
-      if(data[0].count >= 1){
+        console.log(data[0].count);
+      if (data[0].count >= 1) {
         console.log('User already in database')
-      }
-      else { //add user to database if they aren't already in there
-      var query =
-      'INSERT INTO users(id, email, name, country, uri) VALUES($1, $2, $3, $4, $5)'
-      db.one( query, [user.id, user.email, user.display_name, user.country, user.uri])
-        .then(data => {
-          console.log(data.id); // print new user id;
-        })
-        .catch(function(error){
-          console.log('woopsie!');
-        })
+      } else { //add user to database if they aren't already in there
+        var query =
+          'INSERT INTO users(id, email, name, country, uri) VALUES($1, $2, $3, $4, $5)'
+        db.one(query, [user.id, user.email, user.display_name, user.country, user.uri])
+          .then(data => {
+            console.log(data.id); // print new user id;
+          })
+          .catch(function (error) {
+            console.log('woopsie!');
+          })
       }
     })
-    .catch(function(error){
+    .catch(function (error) {
       console.log('error')
     })
 
 }
 
-app.get('/callback', function(req, res) {
+app.get('/callback', function (req, res) {
 
   // your application requests refresh and access tokens
   // after checking the state parameter
@@ -133,25 +132,28 @@ app.get('/callback', function(req, res) {
       json: true
     };
 
-    request.post(authOptions, function(error, response, body) {
+    request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
 
         var access_token = body.access_token,
-            refresh_token = body.refresh_token;
+          refresh_token = body.refresh_token;
 
         var options = {
           url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + access_token },
+          headers: {
+            'Authorization': 'Bearer ' + access_token
+          },
           json: true
         };
 
         // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
+        request.get(options, function (error, response, body) {
           console.log(body);
           var user = body;
           console.log(user.email);
           console.log(user.id);
-          addNewUser(body);        });
+          addNewUser(body);
+        });
 
         // we can also pass the token to the browser to make requests from there
         res.redirect('/#' +
@@ -169,13 +171,15 @@ app.get('/callback', function(req, res) {
   }
 });
 
-app.get('/refresh_token', function(req, res) {
+app.get('/refresh_token', function (req, res) {
 
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+    },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -183,7 +187,7 @@ app.get('/refresh_token', function(req, res) {
     json: true
   };
 
-  request.post(authOptions, function(error, response, body) {
+  request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       var access_token = body.access_token;
       res.send({
