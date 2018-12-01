@@ -1,13 +1,22 @@
+/**
+ * This is an example of a basic node.js script that performs
+ * the Authorization Code oAuth2 flow to authenticate against
+ * the Spotify Accounts.
+ *
+ * For more information, read
+ * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
+ */
 
-//Requirements
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+
+//app.set('view engine', 'pug');
+
 var pgp = require('pg-promise')();
 
-//Database
 const dbConfig = { // CHANGE TO YOUR LOCAL INFO
   host: 'localhost',
   port: 2000,
@@ -16,21 +25,17 @@ const dbConfig = { // CHANGE TO YOUR LOCAL INFO
   password: '' // TODO: Fill in your PostgreSQL password here.
   // Use empty string if you did not set a password
 };
+
 var db = pgp(dbConfig);
 
-
-//Spotify Client Information
 var client_id = '7da0ba282d734fe0ac365644200242a0'; // Your client id
 var client_secret = '4e93e5aa845c4501a8cb91ded16dd84e'; // Your secret
 var redirect_uri = 'http://localhost:8888/callback/'; // Your redirect uri
-var scopes = [
-  'user-read-currently-playing',
-  'user-read-playback-state',
-  'user-modify-playback-state'
-];
 
-//Spotify Player Variables
-
+//var index = require('./routes/index');
+//var store = require('./routes/store');
+//app.use('/', index);
+//app.use('/store', store);
 
 /**
  * Generates a random string containing numbers and letters
@@ -50,11 +55,10 @@ var generateRandomString = function (length) {
 var stateKey = 'spotify_auth_state';
 
 var app = express();
+
 app.use(express.static(__dirname + '/public'))
   .use(cors())
   .use(cookieParser());
-
-
 
 app.get("/login", function (req, res) {
 
@@ -72,8 +76,6 @@ app.get("/login", function (req, res) {
       state: state
     }));
 });
-
-
 
 function addNewUser(user) {
 
@@ -195,8 +197,17 @@ app.get('/refresh_token', function (req, res) {
   });
 });
 
+/*const { createAudio } = require('node-mp3-player')
+const Audio = createAudio();
 
-
+(async () => {
+  const myFile = await Audio(`${__dirname}/mp3/foo.mp3`)
+  await myFile.volume(0.5)
+  const currentVolume = await myFile.volume() // 0.5
+  await myFile.loop()
+  await myFile.stop()
+})()
+*/
 
 console.log('Listening on 8888');
 app.listen(8888);
