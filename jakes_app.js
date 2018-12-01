@@ -221,7 +221,7 @@ request({url:playlists_url, headers:{"Authorization":token}}, function(err, res)
       if (res){
         var playlist = JSON.parse(res.body);
         console.log("playlists: " + playlist.name);
-        playlist.tracks.forEach(function(track){
+        playlist.tracks.items.forEach(function(track){
         console.log(track.track.name);
 
         });
