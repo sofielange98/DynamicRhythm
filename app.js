@@ -196,6 +196,27 @@ app.get('/refresh_token', function (req, res) {
 });
 
 
+var request = require("request");
+var user_id = "1285650559";
+var token = "Bearer" + access_token // need a working access token
+var playlists_url = "https://api.spotify.com/v1/users/"+user_id+"/playlists"
+request({url:playlists_url, headers:{"Authorization":token}}, function(err, res){
+  if (res){
+    var playlists=JSON.parse(res.body);
+    var playlist_url = playlists.items[0].href
+    request({url:playlists_url, headers:{"Authorization":token}}, function(err, res){
+      if (res){
+        var playlist = JSON.parse(res.body);
+        console.log("playlists: " + playlist.name);
+        playlist.tracks.forEach(function(track){
+        console.log(track.track.name);
+
+        });
+
+      }
+    })
+  }
+})
 
 
 console.log('Listening on 8888');
