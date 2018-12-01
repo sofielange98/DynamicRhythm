@@ -14,9 +14,9 @@ var pgp = require('pg-promise')();
 var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi({
+  redirectUri: 'http://localhost:8888/callback/',
   clientId: '2f3468713bf34f9988ed842da3db60f7',
   clientSecret: 'ec4b99e73655440ead5354fac3b04a76',
-  redirectUri: 'http://localhost:8888/callback/'
 });
 var scopes = [
   'user-read-currently-playing',
