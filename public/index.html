@@ -7,9 +7,11 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
-	<noscript>
-		<link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<link rel="stylesheet" href="/webgl-spotify-player/style.css" <noscript>
+	<link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	<link rel="shortcut icon" href="img/favicon.ico" />
+	<script type="text/javascript" src="/webgl-spotify-player/glmatrix.js"></script>
+	<script type="text/javascript" src="/webgl-spotify-player/script.js"></script>
 </head>
 
 <body class="is-preload">
@@ -24,9 +26,7 @@
 				<p>Spotify Visualizer</p>
 				<nav>
 					<ul>
-
-						<li><a href="/login" class="icon fa-spotify"><span class="label">Spotify</span></a></li>
-
+						<li><a href="/login" class="fa fa-spotify"><span class="label">Spotify</span></a></li>
 					</ul>
 				</nav>
 				<div id="loggedin">
@@ -47,12 +47,14 @@
 				  <div class="media-body">
 					<dl class="dl-horizontal">
 					  <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
+					  <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
+					  <!--
 					  <dt>Id</dt><dd>{{id}}</dd>
 					  <dt>Email</dt><dd>{{email}}</dd>
 					  <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
 					  <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-					  <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
 					  <dt>Country</dt><dd>{{country}}</dd>
+					  -->
 					</dl>
 				  </div>
 				</div>
@@ -147,11 +149,22 @@
 
 			<!-- Footer -->
 			<footer id="footer">
-
+				<div class="transposition" id="transposition">
+					<div class="fill" id="trackpositionfill"></div>
+				</div>
+				<nav>
+					<ul>
+						<li><a href="https://github.com/sofielange98/DynamicRhythm" class="fa fa-github"><span class="label"></span></a></li>
+						<li><a href="https://github.com/possan/webgl-spotify-connect-now-playing-screen-example"><span class="label">WebGL
+									Spotify Visualizer</span></a></li>
+					</ul>
+				</nav>
 			</footer>
 
 		</div>
 	</div>
+	<canvas id="canvas" style="border: none; width:20%; height:20%;" width="1200" height="800"></canvas><br />
+	<div id="toast" class="toast"><span id="text"></span><span id="text2"></span></div>
 	<script>
 		window.onload = function () {
 			document.body.classList.remove('is-preload');
@@ -162,6 +175,21 @@
 		window.onorientationchange = function () {
 			document.body.scrollTop = 0;
 		}
+	</script>
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-49750240-1', 'auto');
+		ga('send', 'pageview');
 	</script>
 </body>
 

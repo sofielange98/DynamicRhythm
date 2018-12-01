@@ -19,42 +19,8 @@ canvas {
     border: 0;
 }
 
-.login {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    font: 8pt Arial;
-    color: rgba(255,255,255,0.33);
-}
-
-.biglogin {
-    display: none;
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    text-align: center;
-}
-
-.biglogin a {
-    margin: 0 auto;
-    font: 18pt "Helvetica Neue", "Helvetica", Arial;
-    padding: 20px 40px;
-    border-radius: 100px;
-    background-color: rgb(30,200,20);
-    box-shadow: 0 0 100px rgba(30,230,20,0.9);
-    color: #fff;
-    display: inline-block;
-    text-align: center;;
-    cursor: pointer;
-    transition: all 0.1s ease-in-out;
-}
-
-.biglogin a:hover {
-    transform: scale(1.1);
-}
-
 div.toast {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     left: 0;
     bottom: 0;
@@ -93,7 +59,7 @@ div.trackposition {
     bottom: 10px;
     right: 10px;
     height: 5px;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
 
