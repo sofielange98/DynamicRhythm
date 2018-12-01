@@ -30,6 +30,29 @@
 					</ul>
 				</nav>
 				<div id="loggedin">
+					<button id = "playbtn" class = "btn btn-default"> Click to toggle play/pause</button>
+        <button
+        id = "spotify:user:coochiemama:playlist:59qIYupKIzuB2L4VD1HqsL"
+        class = "btn btn-default"
+        ondblclick= "changePlaylist(this)"
+        > Cool</button>
+        <button
+        id = "spotify:user:coochiemama:playlist:03CAw5ZsKYSUKD0s9FvkP4"
+        class = "btn btn-default"
+        onbdlclick = "changePlaylist(this)"
+        > New Patio</button>
+        <button
+        id = "spotify:user:officialcherub:playlist:3aV55eWHmEycyBdcQwWgt5"
+        class = "btn btn-default"
+        ondblclick = "changePlaylist(this)"
+        > Cherub</button>
+        <button
+        id = "spotify:user:spotify:playlist:37i9dQZF1DXchOWDSVJZqj"
+        class = "btn btn-default"
+        ondblclick = "changePlaylist(this)"
+        > 1975</button>
+        <img id="current-track" height = "50px" width = "50px"/>
+        <h3 id="current-track-name"></h3>
 					<div id="user-profile">
 					</div>
 					<div id="oauth">
@@ -70,7 +93,10 @@
 
 			<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
 			<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+			    <script src="https://sdk.scdn.co/spotify-player.js"></script>
 			<script>
+				var access_token;
+    		var device;
 				(function () {
 
 					/**
@@ -97,8 +123,8 @@
 
 					var params = getHashParams();
 
-					var access_token = params.access_token,
-						refresh_token = params.refresh_token,
+					access_token = params.access_token;
+						var refresh_token = params.refresh_token,
 						error = params.error;
 
 					if (error) {
@@ -123,6 +149,53 @@
 									$('#loggedin').show();
 								}
 							});
+							let _token = access_token;
+
+            // Set up the Web Playback SDK
+
+            window.onSpotifyPlayerAPIReady = () => {
+              const player = new Spotify.Player({
+                name: 'Web Playback SDK Template',
+                getOAuthToken: cb => { cb(_token); }
+              });
+
+              player.on('playback_error', e => console.error(e));
+
+              // Playback status updates
+              player.on('player_state_changed', state => {
+                console.log(state)
+                $('#current-track').attr('src', state.track_window.current_track.album.images[0].url);
+                $('#current-track-name').text(state.track_window.current_track.name);
+              });
+
+              // Ready
+              player.on('ready', data => {
+                console.log('Ready with Device ID', data.device_id);
+                // Play a track using our new device ID
+                device = data.device_id;
+                console.log(device);
+                play(data.device_id,"spotify:playlist:5LMpJYdYBCZN0uuh8Dnxyp");
+              });
+              // Connect to the player!
+              player.connect();
+              document.getElementById("playbtn").addEventListener("click", function(){
+                player.togglePlay();
+              });
+            }
+            // Play a specified track on the Web Playback SDK's device ID
+            function play(device_id, uri) {
+              console.log(uri);
+              dataString = '{"context_uri":"'+ uri +'","position_ms":0}';
+              $.ajax({
+               url: "https://api.spotify.com/v1/me/player/play?device_id=" + device_id,
+               type: "PUT",
+               data: dataString,
+               beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + _token );},
+               success: function(data) {
+                 //console.log(data)
+               }
+              });
+            }
 						} else {
 							// render initial screen
 							$('#login').show();
@@ -145,6 +218,20 @@
 						}, false);
 					}
 				})();
+				function changePlaylist(elem) {
+        console.log(elem);
+        uri = elem.id;
+        dataString = '{"context_uri":"'+ uri +'","position_ms":0}';
+        $.ajax({
+         url: "https://api.spotify.com/v1/me/player/play?device_id=" + device,
+         type: "PUT",
+         data: dataString,
+         beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + access_token );},
+         success: function(data) {
+           console.log(data)
+         }
+        });
+      }
 			</script>
 
 			<!-- Footer -->
