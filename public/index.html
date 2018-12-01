@@ -1,41 +1,44 @@
 <!DOCTYPE HTML>
 
 <html>
-	<head>
-		<title>Dynamic Rhythm</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+<head>
+	<title>Dynamic Rhythm</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	<link rel="shortcut icon" href="img/favicon.ico" />
-	</head>
-	<body class="is-preload">
-		<div id="wrapper">
-			<div id="bg"></div>
-			<div id="overlay"></div>
-			<div id="main">
+</head>
 
-				<!-- Header -->
-					<header id="header">
-						<h1>Dynamic Rhythm</h1>
-						<p>All in One Music</p>
-						<nav>
-							<ul>
-								
-								<li><a href="/login" class="icon fa-spotify"><span class="label">Spotify</span></a></li>
-							
-							</ul>
-						</nav>
-						<div id="loggedin">
-						<div id="user-profile">
-						</div>
-						<div id="oauth">
-						</div>
-						<button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+<body class="is-preload">
+	<div id="wrapper">
+		<div id="bg"></div>
+		<div id="overlay"></div>
+		<div id="main">
+
+			<!-- Header -->
+			<header id="header">
+				<h1>Dynamic Rhythm</h1>
+				<p>Spotify Visualizer</p>
+				<nav>
+					<ul>
+
+						<li><a href="/login" class="icon fa-spotify"><span class="label">Spotify</span></a></li>
+
+					</ul>
+				</nav>
+				<div id="loggedin">
+					<div id="user-profile">
 					</div>
-					</header>
+					<div id="oauth">
+					</div>
+					<button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+				</div>
+			</header>
 
-				<script id="user-profile-template" type="text/x-handlebars-template">
+			<script id="user-profile-template" type="text/x-handlebars-template">
 				<h1>Logged in as {{display_name}}</h1>
 				<div class="media">
 				  <div class="pull-left">
@@ -142,17 +145,24 @@
 				})();
 			</script>
 
-				<!-- Footer -->
-					<footer id="footer">
-						
-					</footer>
+			<!-- Footer -->
+			<footer id="footer">
 
-			</div>
+			</footer>
+
 		</div>
-		<script>
-			window.onload = function() { document.body.classList.remove('is-preload'); }
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
-		</script>
-	</body>
+	</div>
+	<script>
+		window.onload = function () {
+			document.body.classList.remove('is-preload');
+		}
+		window.ontouchmove = function () {
+			return false;
+		}
+		window.onorientationchange = function () {
+			document.body.scrollTop = 0;
+		}
+	</script>
+</body>
+
 </html>
