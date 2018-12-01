@@ -72,7 +72,8 @@ function audioError(audio) {
 		case 3:
 			showTipBox("error", "Cannot Find Audio Source");
 			break;
-		default: console.warn("SWITCH ERROR");
+		default:
+			console.warn("SWITCH ERROR");
 			break;
 	}
 }
