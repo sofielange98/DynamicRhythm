@@ -30,7 +30,6 @@
 					</ul>
 				</nav>
 				<div id="loggedin">
-<<<<<<< HEAD
 					<button id = "playbtn" class = "btn btn-default"> Click to toggle play/pause</button>
 
         <button
@@ -53,21 +52,9 @@
         class = "btn btn-default"
         ondblclick = "changePlaylist(this)"
         > 1975</button>
+        <p id ="userPlaylist"></p>
         <!-- <img id="current-track" height = "50px" width = "50px"/> -->
         <h3 id="current-track-name"></h3>
-=======
-					<button id="playbtn" class="btn btn-default"> Click to toggle play/pause</button>
-					<button id="spotify:user:coochiemama:playlist:59qIYupKIzuB2L4VD1HqsL" class="btn btn-default" ondblclick="changePlaylist(this)">
-						Cool</button>
-					<button id="spotify:user:coochiemama:playlist:03CAw5ZsKYSUKD0s9FvkP4" class="btn btn-default" ondblclick="changePlaylist(this)">
-						New Patio</button>
-					<button id="spotify:user:officialcherub:playlist:3aV55eWHmEycyBdcQwWgt5" class="btn btn-default" ondblclick="changePlaylist(this)">
-						Cherub</button>
-					<button id="spotify:user:spotify:playlist:37i9dQZF1DXchOWDSVJZqj" class="btn btn-default" ondblclick="changePlaylist(this)">
-						1975</button>
-					<img id="current-track" height="50px" width="50px" />
-					<h3 id="current-track-name"></h3>
->>>>>>> d05ec5ff62197cc5d21e3f50aca95b78729638fb
 					<div id="user-profile">
 					</div>
 					<div id="oauth">
@@ -83,7 +70,7 @@
 					<img class="media-object" width="150" src="{{images.0.url}}" />
 				  </div>
 				  <div class="media-body">
-					<dl class="dl-horizontal">
+<!-- 					<dl class="dl-horizontal">
 					  <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
 					  <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
 					  <dt>Id</dt><dd>{{id}}</dd>
@@ -91,29 +78,25 @@
 					  <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
 					  <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
 					  <dt>Country</dt><dd>{{country}}</dd>
-					</dl>
+					</dl> -->
 				  </div>
 				</div>
 			  </script>
 
 			<script id="oauth-template" type="text/x-handlebars-template">
-<<<<<<< HEAD
- 				<h2>oAuth info</h2>
-=======
-				<!-- 				<h2>oAuth info</h2>
->>>>>>> d05ec5ff62197cc5d21e3f50aca95b78729638fb
+<!--  				<h2>oAuth info</h2>
 				<dl class="dl-horizontal">
 				  <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
 				  <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}</dd>
-				</dl>
+				</dl> -->
 			  </script>
 
 			<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
 			<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-			<script src="https://sdk.scdn.co/spotify-player.js"></script>
+			    <script src="https://sdk.scdn.co/spotify-player.js"></script>
 			<script>
 				var access_token;
-				var device;
+    		var device;
 				(function () {
 
 					/**
@@ -141,7 +124,7 @@
 					var params = getHashParams();
 
 					access_token = params.access_token;
-					var refresh_token = params.refresh_token,
+						var refresh_token = params.refresh_token,
 						error = params.error;
 
 					if (error) {
@@ -168,55 +151,51 @@
 							});
 							let _token = access_token;
 
-							// Set up the Web Playback SDK
+            // Set up the Web Playback SDK
 
-							window.onSpotifyPlayerAPIReady = () => {
-								const player = new Spotify.Player({
-									name: 'Web Playback SDK Template',
-									getOAuthToken: cb => {
-										cb(_token);
-									}
-								});
+            window.onSpotifyPlayerAPIReady = () => {
+              const player = new Spotify.Player({
+                name: 'Web Playback SDK Template',
+                getOAuthToken: cb => { cb(_token); }
+              });
 
-								player.on('playback_error', e => console.error(e));
+              player.on('playback_error', e => console.error(e));
 
-								// Playback status updates
-								player.on('player_state_changed', state => {
-									console.log(state)
-									$('#current-track').attr('src', state.track_window.current_track.album.images[0].url);
-									$('#current-track-name').text(state.track_window.current_track.name);
-								});
+              // Playback status updates
+              player.on('player_state_changed', state => {
+                console.log(state)
+                $('#current-track').attr('src', state.track_window.current_track.album.images[0].url);
+                $('#current-track-name').text(state.track_window.current_track.name);
+              });
 
-								// Ready
-								player.on('ready', data => {
-									console.log('Ready with Device ID', data.device_id);
-									// Play a track using our new device ID
-									device = data.device_id;
-									console.log(device);
-									play(data.device_id, "spotify:playlist:5LMpJYdYBCZN0uuh8Dnxyp");
-								});
-								// Connect to the player!
-								player.connect();
-								document.getElementById("playbtn").addEventListener("click", function () {
-									player.togglePlay();
-								});
-							}
-							// Play a specified track on the Web Playback SDK's device ID
-							function play(device_id, uri) {
-								console.log(uri);
-								dataString = '{"context_uri":"' + uri + '","position_ms":0}';
-								$.ajax({
-									url: "https://api.spotify.com/v1/me/player/play?device_id=" + device_id,
-									type: "PUT",
-									data: dataString,
-									beforeSend: function (xhr) {
-										xhr.setRequestHeader('Authorization', 'Bearer ' + _token);
-									},
-									success: function (data) {
-										//console.log(data)
-									}
-								});
-							}
+              // Ready
+              player.on('ready', data => {
+                console.log('Ready with Device ID', data.device_id);
+                // Play a track using our new device ID
+                device = data.device_id;
+                console.log(device);
+                play(data.device_id,"spotify:playlist:5LMpJYdYBCZN0uuh8Dnxyp");
+              });
+              // Connect to the player!
+              player.connect();
+              document.getElementById("playbtn").addEventListener("click", function(){
+                player.togglePlay();
+              });
+            }
+            // Play a specified track on the Web Playback SDK's device ID
+            function play(device_id, uri) {
+              console.log(uri);
+              dataString = '{"context_uri":"'+ uri +'","position_ms":0}';
+              $.ajax({
+               url: "https://api.spotify.com/v1/me/player/play?device_id=" + device_id,
+               type: "PUT",
+               data: dataString,
+               beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + _token );},
+               success: function(data) {
+                 //console.log(data)
+               }
+              });
+            }
 						} else {
 							// render initial screen
 							$('#login').show();
@@ -239,24 +218,22 @@
 						}, false);
 					}
 				})();
-
 				function changePlaylist(elem) {
-					console.log(elem);
-					uri = elem.id;
-					dataString = '{"context_uri":"' + uri + '","position_ms":0}';
-					$.ajax({
-						url: "https://api.spotify.com/v1/me/player/play?device_id=" + device,
-						type: "PUT",
-						data: dataString,
-						beforeSend: function (xhr) {
-							xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-						},
-						success: function (data) {
-							console.log(data)
-						}
-					});
-				}
+        console.log(elem);
+        uri = elem.id;
+        dataString = '{"context_uri":"'+ uri +'","position_ms":0}';
+        $.ajax({
+         url: "https://api.spotify.com/v1/me/player/play?device_id=" + device,
+         type: "PUT",
+         data: dataString,
+         beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + access_token );},
+         success: function(data) {
+           console.log(data)
+         }
+        });
+      }
 			</script>
+
 		<script>
         	// var request = require("request");
 			// var user_id = "1285650559";
@@ -315,6 +292,11 @@
 			// console.log(result)
         // document.getElementById("userPlaylist").innerHTML=add();
         </script>
+        <button
+	        id = "spotify:user:coochiemama:playlist:59qIYupKIzuB2L4VD1HqsL"
+	        class = "btn btn-default"
+	        ondblclick= "changePlaylist(this)"
+        > result</button>
 
 			<!-- Footer -->
 			<footer id="footer">

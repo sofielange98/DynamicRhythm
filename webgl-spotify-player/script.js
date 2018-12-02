@@ -8,7 +8,7 @@
 // Global all the things/variables!
 
 // auth
-var client_id = '7da0ba282d734fe0ac365644200242a0';
+var CLIENT_ID = '8da32c6e9f9f4edab31faa41d9f10afd';
 var SCOPES = [
   'user-read-currently-playing',
   'user-read-playback-state',
@@ -70,6 +70,7 @@ var nextTrackBeat = 0;
 // misc ui
 var closetimer = 0;
 
+var app = require('../app');
 
 
 // --------------------------------------------------------------------------------------
@@ -988,7 +989,7 @@ function setNowPlayingTrack(uri) {
 
 function login() {
   var redirect_uri = location.protocol + '//' + location.host + location.pathname;
-  var url = 'https://accounts.spotify.com/authorize?client_id=' + client_id +
+  var url = 'https://accounts.spotify.com/authorize?client_id=' + CLIENT_ID +
     '&redirect_uri=' + encodeURIComponent(redirect_uri) +
     '&scope=' + SCOPES.join('%20') +
     '&response_type=token';
