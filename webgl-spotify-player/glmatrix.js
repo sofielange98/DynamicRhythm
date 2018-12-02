@@ -241,9 +241,9 @@ mat4.create = function (a) {
         b[12] = a[12];
         b[13] = a[13];
         b[14] = a[14];
-        b[15] = a[15]
+        b[15] = a[15];
     }
-    return b
+    return b;
 };
 mat4.set = function (a, b) {
     b[0] = a[0];
