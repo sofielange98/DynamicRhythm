@@ -31,6 +31,7 @@
 				</nav>
 				<div id="loggedin">
 					<button id = "playbtn" class = "btn btn-default"> Click to toggle play/pause</button>
+
         <button
         id = "spotify:user:coochiemama:playlist:59qIYupKIzuB2L4VD1HqsL"
         class = "btn btn-default"
@@ -51,7 +52,7 @@
         class = "btn btn-default"
         ondblclick = "changePlaylist(this)"
         > 1975</button>
-        <img id="current-track" height = "50px" width = "50px"/>
+        <!-- <img id="current-track" height = "50px" width = "50px"/> -->
         <h3 id="current-track-name"></h3>
 					<div id="user-profile">
 					</div>
@@ -69,7 +70,6 @@
 				  </div>
 				  <div class="media-body">
 					<dl class="dl-horizontal">
-					  <!--
 					  <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
 					  <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
 					  <dt>Id</dt><dd>{{id}}</dd>
@@ -77,18 +77,17 @@
 					  <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
 					  <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
 					  <dt>Country</dt><dd>{{country}}</dd>
-					  -->
 					</dl>
 				  </div>
 				</div>
 			  </script>
 
 			<script id="oauth-template" type="text/x-handlebars-template">
-<!-- 				<h2>oAuth info</h2>
+ 				<h2>oAuth info</h2>
 				<dl class="dl-horizontal">
 				  <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
 				  <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}</dd>
-				</dl> -->
+				</dl>
 			  </script>
 
 			<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
@@ -233,6 +232,58 @@
         });
       }
 			</script>
+		<script>
+        	// var request = require("request");
+			// var user_id = "1285650559";
+			// var token = "Bearer" + access_token // need a working access token
+			// var playlists_url = "https://api.spotify.com/v1/users/"+user_id+"/playlists"
+			// request({url:playlists_url, headers:{"Authorization":token}}, function(err, res){
+			//   if (res){
+			//     var playlists=JSON.parse(res.body);
+			//     var playlist_url = playlists.items[0].href
+			//     request({url:playlists_url, headers:{"Authorization":token}}, function(err, res){
+			//       if (res){
+			//         var playlist = JSON.parse(res.body);
+			//         console.log("playlists: " + playlist.name);
+			//         playlist.tracks.items.forEach(function(track){
+			//         console.log(track.track.name);
+
+			//         });
+
+			//       }
+			//     })
+			//   }
+			// })
+			$.ajax({
+				type: "GET",
+				url: "https://api.spotify.com/v1/me/playlists",
+				headers: { 'Authorization': 'Bearer ' + access_token },
+				success: (result) => {
+					// result will be an ajax response with the player data
+					var playlistInfo = result;
+					console.log(result);
+					for (i = 0; i < result.items.length; i++)  
+						{ 
+						    console.log(result.items[i].name + " : " + result.items[i].href); 
+						} 
+					// var playlistArray = playlistInfo.items;
+					// playlistArray.forEach(function(element){
+					// 	console.log(element);
+					// 	var playlistNames = playlistArray[element].name;
+					// 	console.log(playlistNames);
+
+					// })
+					// var playlistNames = playlistArray.name;
+					// console.log(playlistInfo);
+					// console.log(playlistItems);
+					// console.log(playlistNames);
+				}
+				// [""0""].name
+				// [1].name
+
+			})
+			// console.log(result)
+        </script>
 
 			<!-- Footer -->
 			<footer id="footer">
