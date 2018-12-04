@@ -30,45 +30,15 @@
 					</ul>
 				</nav>
 				<div id="loggedin">
-<<<<<<< HEAD
-					<button id = "playbtn" class = "btn btn-default"> Click to toggle play/pause</button>
 
-        <button
-        id = "spotify:user:coochiemama:playlist:59qIYupKIzuB2L4VD1HqsL"
-        class = "btn btn-default"
-        ondblclick= "changePlaylist(this)"
-        > Cool</button>
-        <button
-        id = "spotify:user:coochiemama:playlist:03CAw5ZsKYSUKD0s9FvkP4"
-        class = "btn btn-default"
-        onbdlclick = "changePlaylist(this)"
-        > New Patio</button>
-        <button
-        id = "spotify:user:officialcherub:playlist:3aV55eWHmEycyBdcQwWgt5"
-        class = "btn btn-default"
-        ondblclick = "changePlaylist(this)"
-        > Cherub</button>
-        <button
-        id = "spotify:user:spotify:playlist:37i9dQZF1DXchOWDSVJZqj"
-        class = "btn btn-default"
-        ondblclick = "changePlaylist(this)"
-        > 1975</button>
-        <!-- <img id="current-track" height = "50px" width = "50px"/> -->
+					<button id = "playbtn" class = "btn btn-default"> Click to toggle play/pause</button>
+		<p id = "user_playlists">
+				Playlists
+			</p>
+        <img id="current-track" height = "50px" width = "50px"/>
         <h3 id="current-track-name"></h3>
-=======
-					<button id="playbtn" class="btn btn-default"> Click to toggle play/pause</button>
-					<button id="spotify:user:coochiemama:playlist:59qIYupKIzuB2L4VD1HqsL" class="btn btn-default" ondblclick="changePlaylist(this)">
-						Cool</button>
-					<button id="spotify:user:coochiemama:playlist:03CAw5ZsKYSUKD0s9FvkP4" class="btn btn-default" ondblclick="changePlaylist(this)">
-						New Patio</button>
-					<button id="spotify:user:officialcherub:playlist:3aV55eWHmEycyBdcQwWgt5" class="btn btn-default" ondblclick="changePlaylist(this)">
-						Cherub</button>
-					<button id="spotify:user:spotify:playlist:37i9dQZF1DXchOWDSVJZqj" class="btn btn-default" ondblclick="changePlaylist(this)">
-						1975</button>
-					<img id="current-track" height="50px" width="50px" />
-					<h3 id="current-track-name"></h3>
->>>>>>> d05ec5ff62197cc5d21e3f50aca95b78729638fb
-					<div id="user-profile">
+
+ 					<div id="user-profile">
 					</div>
 					<div id="oauth">
 					</div>
@@ -85,22 +55,22 @@
 				  <div class="media-body">
 					<dl class="dl-horizontal">
 					  <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
-					  <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
+ 					  <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
 					  <dt>Id</dt><dd>{{id}}</dd>
 					  <dt>Email</dt><dd>{{email}}</dd>
 					  <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
 					  <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-					  <dt>Country</dt><dd>{{country}}</dd>
+					  <dt>Country</dt><dd>{{country}}</dd> 
 					</dl>
 				  </div>
 				</div>
 			  </script>
 
 			<script id="oauth-template" type="text/x-handlebars-template">
-<<<<<<< HEAD
+ <<<<<<< HEAD
  				<h2>oAuth info</h2>
 =======
-				<!-- 				<h2>oAuth info</h2>
+								<h2>oAuth info</h2>
 >>>>>>> d05ec5ff62197cc5d21e3f50aca95b78729638fb
 				<dl class="dl-horizontal">
 				  <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
@@ -257,65 +227,44 @@
 					});
 				}
 			</script>
+			
 		<script>
-        	// var request = require("request");
-			// var user_id = "1285650559";
-			// var token = "Bearer" + access_token // need a working access token
-			// var playlists_url = "https://api.spotify.com/v1/users/"+user_id+"/playlists"
-			// request({url:playlists_url, headers:{"Authorization":token}}, function(err, res){
-			//   if (res){
-			//     var playlists=JSON.parse(res.body);
-			//     var playlist_url = playlists.items[0].href
-			//     request({url:playlists_url, headers:{"Authorization":token}}, function(err, res){
-			//       if (res){
-			//         var playlist = JSON.parse(res.body);
-			//         console.log("playlists: " + playlist.name);
-			//         playlist.tracks.items.forEach(function(track){
-			//         console.log(track.track.name);
 
-			//         });
+			// function addPlaylist() {
 
-			//       }
-			//     })
-			//   }
-			// })
-			// function add() {			
-						$.ajax({
-						type: "GET",
-						url: "https://api.spotify.com/v1/me/playlists",
-						headers: { 'Authorization': 'Bearer ' + access_token },
-						success: (result) => {
-							// result will be an ajax response with the player data
-							var playlistInfo = result["items"];
-							console.log(playlistInfo);
-							for (i = 0; i < playlistInfo.length; i++)  
-								{ 
-								    console.log(playlistInfo[i].name + " : " + playlistInfo[i].id);
-								    // return result.items[i].name + " : " + result.items[i].external_urls.spotify;
+					$.ajax({
+					type: "GET",
+					url: "https://api.spotify.com/v1/me/playlists",
+					headers: { 'Authorization': 'Bearer ' + access_token },
+					success: (result) => {
+						// result will be an ajax response with the player data
+						var playlistInfo = result["items"];
+						console.log(playlistInfo);
+						for (i = 0; i < playlistInfo.length; i++)  
+							{ 
+								var p = document.getElementById("user_playlists");
+								var playlist_name = playlistInfo[i].name;
+								var playlist_uri = playlistInfo[i].uri;
+							    console.log(playlist_name + " : " + playlist_uri);
+							    var new_button = "<button id = '" + playlist_uri + "'class = 'btn btn-default' ondblclick= 'changePlaylist(this)' >"+ playlist_name + "</button>";
+							    // var li = document.createElement("li");
+							    // li.setAttribute('id',playlistInfo[i].name + " : " + playlistInfo[i].uri);
+							    // li.appendChild(document.createTextNode(playlistInfo[i].name + " : " + playlistInfo[i].uri));
+							    $("#user_playlists").append(new_button);
+							    // p.appendChild(new_button);
 
-	
-								} 
-							// var playlistArray = playlistInfo.items;
-							// playlistArray.forEach(function(element){
-							// 	console.log(element);
-							// 	var playlistNames = playlistArray[element].name;
-							// 	console.log(playlistNames);
-	
-							// })
-							// var playlistNames = playlistArray.name;
-							// console.log(playlistInfo);
-							// console.log(playlistItems);
-							// console.log(playlistNames);
+
+							} 
 						}
-						// [""0""].name
-						// [1].name
-	
-					})
-		//}
-			// console.log(result)
-        // document.getElementById("userPlaylist").innerHTML=add();
-        </script>
 
+					})
+        </script>
+<!--         <ul id = "playlist_tracks"></ul>
+        <script>
+        	function tracklist() {
+
+        	}
+        </script -->>
 			<!-- Footer -->
 			<footer id="footer">
 				<div class="transposition" id="transposition">
