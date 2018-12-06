@@ -13,36 +13,30 @@ var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
-//app.set('view engine', 'pug');
-
 var pgp = require('pg-promise')();
 
-const dbConfig = { // CHANGE TO YOUR LOCAL INFO
-  host: 'localhost',
-  port: 2000,
-  database: 'dynamic_rhythm',
-  user: 'sofielange98',
-  password: '' // TODO: Fill in your PostgreSQL password here.
-  // Use empty string if you did not set a password
+const dbConfig = {
+   host: 'localhost',
+   port: 5432,
+   database: 'dynamic_rhythm',
+   user: 'sofielange98',
+   password: 'smokey98' // TODO: Fill in your PostgreSQL password here.
+                // Use empty string if you did not set a password
 };
 
 var db = pgp(dbConfig);
 
-var client_id = '7da0ba282d734fe0ac365644200242a0'; // Your client id
-var client_secret = '4e93e5aa845c4501a8cb91ded16dd84e'; // Your secret
-var redirect_uri = 'http://localhost:8888/callback/'; // Your redirect uri
 
-//var index = require('./routes/index');
-//var store = require('./routes/store');
-//app.use('/', index);
-//app.use('/store', store);
+var client_id = 'bc98f63798b24333bfe620e8b18f99e2'; // Your client id
+var client_secret = '77491b6e4d4d47cfa4fc70d3686d5ee4'; // Your secret
+var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
-var generateRandomString = function (length) {
+var generateRandomString = function(length) {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -57,16 +51,16 @@ var stateKey = 'spotify_auth_state';
 var app = express();
 
 app.use(express.static(__dirname + '/public'))
-  .use(cors())
-  .use(cookieParser());
+   .use(cors())
+   .use(cookieParser());
 
-app.get("/login", function (req, res) {
+app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'streaming user-modify-playback-state user-read-private user-read-email playlist-read playlist-read-private playlist-modify playlist-modify-private';
+  var scope = 'user-read-currently-playing playlist-read-private streaming user-read-private user-read-email user-modify-playback-state';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -77,33 +71,34 @@ app.get("/login", function (req, res) {
     }));
 });
 
-function addNewUser(user) {
+function addNewUser(user){
 
   db.any('SELECT count(*) from users where id = $1', [user.id])
-    .then(data => {
+    .then(data=>{
       console.log(data),
-        console.log(data[0].count);
-      if (data[0].count >= 1) {
+      console.log(data[0].count);
+      if(data[0].count >= 1){
         console.log('User already in database')
-      } else { //add user to database if they aren't already in there
-        var query =
-          'INSERT INTO users(id, email, name, country, uri) VALUES($1, $2, $3, $4, $5)'
-        db.one(query, [user.id, user.email, user.display_name, user.country, user.uri])
-          .then(data => {
-            console.log(data.id); // print new user id;
-          })
-          .catch(function (error) {
-            console.log('woopsie!');
-          })
+      }
+      else { //add user to database if they aren't already in there
+      var query =
+      'INSERT INTO users(id, email, name, country, uri) VALUES($1, $2, $3, $4, $5)'
+      db.one( query, [user.id, user.email, user.display_name, user.country, user.uri])
+        .then(data => {
+          console.log(data.id); // print new user id;
+        })
+        .catch(function(error){
+          console.log('woopsie!');
+        })
       }
     })
-    .catch(function (error) {
+    .catch(function(error){
       console.log('error')
     })
 
 }
 
-app.get('/callback', function (req, res) {
+app.get('/callback', function(req, res) {
 
   // your application requests refresh and access tokens
   // after checking the state parameter
@@ -132,22 +127,20 @@ app.get('/callback', function (req, res) {
       json: true
     };
 
-    request.post(authOptions, function (error, response, body) {
+    request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
 
-        var access_token = body.access_token,
-          refresh_token = body.refresh_token;
+            access_token = body.access_token;
+            refresh_token = body.refresh_token;
 
         var options = {
           url: 'https://api.spotify.com/v1/me',
-          headers: {
-            'Authorization': 'Bearer ' + access_token
-          },
+          headers: { 'Authorization': 'Bearer ' + access_token },
           json: true
         };
 
         // use the access token to access the Spotify Web API
-        request.get(options, function (error, response, body) {
+        request.get(options, function(error, response, body) {
           console.log(body);
           var user = body;
           console.log(user.email);
@@ -168,18 +161,17 @@ app.get('/callback', function (req, res) {
           }));
       }
     });
+
   }
 });
 
-app.get('/refresh_token', function (req, res) {
+app.get('/refresh_token', function(req, res) {
 
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: {
-      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-    },
+    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -187,7 +179,7 @@ app.get('/refresh_token', function (req, res) {
     json: true
   };
 
-  request.post(authOptions, function (error, response, body) {
+  request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       var access_token = body.access_token;
       res.send({
@@ -196,18 +188,8 @@ app.get('/refresh_token', function (req, res) {
     }
   });
 });
-
-/*const { createAudio } = require('node-mp3-player')
-const Audio = createAudio();
-
-(async () => {
-  const myFile = await Audio(`${__dirname}/mp3/foo.mp3`)
-  await myFile.volume(0.5)
-  const currentVolume = await myFile.volume() // 0.5
-  await myFile.loop()
-  await myFile.stop()
-})()
-*/
-
+app.get('/playlists', function(req, res){
+  response.render()
+});
 console.log('Listening on 8888');
 app.listen(8888);
