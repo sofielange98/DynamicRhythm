@@ -4,7 +4,7 @@
     <title>DynamicRhythm</title>
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    
+
     <link rel = "stylesheet" href = "./button.css"/>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" type="text/css" href="./fontawesome/css/font-awesome.min.css" />
@@ -48,9 +48,9 @@
 
     <div class="page_playerbar clearfix">
       <!-- buttons -->
-      <div class="playerbar_playbtngroup" id="playbtn">
+      <div class="playerbar_playbtngroup">
         <div class="btn prev" onclick="sendCommand('POST', 'previous')"><i class="fa fa-step-backward" aria-hidden="true"></i></div>
-        <div class="btn play" ><i class="fa fa-play" aria-hidden="true"></i></div>
+        <div class="btn play" id = "playbtn"><i class="fa fa-play" aria-hidden="true"></i></div>
         <div class="btn play" ><i class="fa fa-pause" aria-hidden="true"></i></div>
         <div class="btn next" onclick="sendCommand('POST', 'next')"><i class="fa fa-step-forward" aria-hidden="true"></i></div>
       </div>
@@ -58,7 +58,7 @@
     </div>
   </div>
 
-  
+
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -176,7 +176,8 @@
                 // Play a track using our new device ID
                 device = data.device_id;
                 console.log(device);
-                play(data.device_id,"spotify:user:spotify:playlist:37i9dQZEVXbkDYL9j9CdiR");
+                //https://open.spotify.com/playlist/617yLFUQawKhEyDRDmKBuL
+                play(data.device_id,"spotify:user:spotify:playlist:617yLFUQawKhEyDRDmKBuL");
               });
               // Connect to the player!
               player.connect();
@@ -236,7 +237,7 @@
                   console.log(result);
                   var tracks = result["items"];
       						console.log(tracks);
-                  current_tracks.innerHTML = "TRACKS";
+                  current_tracks.innerHTML = "Current Tracks:";
       						for (i = 0; i < tracks.length; i++)
       							{
       								var p = document.getElementById("current_tracks");
