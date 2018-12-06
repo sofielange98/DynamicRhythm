@@ -51,7 +51,7 @@
       <div class="playerbar_playbtngroup">
         <div class="btn prev" onclick="sendCommand('POST', 'previous')"><i class="fa fa-step-backward" aria-hidden="true"></i></div>
         <div class="btn play" id = "playbtn"><i class="fa fa-play" aria-hidden="true"></i></div>
-        <div class="btn play" ><i class="fa fa-pause" aria-hidden="true"></i></div>
+        <div class="btn play" id = "pausebtn"><i class="fa fa-pause" aria-hidden="true"></i></div>
         <div class="btn next" onclick="sendCommand('POST', 'next')"><i class="fa fa-step-forward" aria-hidden="true"></i></div>
       </div>
       <div class="trackposition" id="trackposition"><div class="fill" id="trackpositionfill"></div>
@@ -182,7 +182,11 @@
               // Connect to the player!
               player.connect();
               document.getElementById("playbtn").addEventListener("click", function(){
-                console.log(this);
+                //console.log(this);
+                player.togglePlay();
+              });
+              document.getElementById("pausebtn").addEventListener("click", function(){
+                //console.log(this);
                 player.togglePlay();
               });
 
@@ -211,9 +215,11 @@
           }
         }
       })();
+      var curPlaylist;
           function changePlaylist(elem) {
             console.log(elem);
             uri = elem.id;
+            curPlaylist = uri;
             dataString = '{"context_uri":"'+ uri +'","position_ms":0}';
             $.ajax({
              url: "https://api.spotify.com/v1/me/player/play?device_id=" + device,
@@ -243,8 +249,9 @@
       								var p = document.getElementById("current_tracks");
       								var t_name = tracks[i].track.name;
       								var t_uri = tracks[i].track.uri;
+                      var ind = i.toString();
       							    console.log(t_name + " : " + t_uri);
-      							    var new_button = "<button id = '" + t_uri + "'class = 'btn btn-default'>"+ t_name + "</button>";
+      							    var new_button = "<button id = '" + t_uri + "'class = 'btn btn-default' onclick = 'skipToSong(this)'>"+ t_name + "</button>";
       							    // var li = document.createElement("li");
       							    // li.setAttribute('id',playlistInfo[i].name + " : " + playlistInfo[i].uri);
       							    // li.appendChild(document.createTextNode(playlistInfo[i].name + " : " + playlistInfo[i].uri));
@@ -253,6 +260,20 @@
       							}
       						}
                 });
+          }
+          function skipToSong(elem){
+            offset = elem.id;
+            dataString = '{"context_uri":"'+ curPlaylist +'","position_ms":0,"offset":{"uri":"'+offset+'"}}';
+            console.log(dataString);
+            $.ajax({
+             url: "https://api.spotify.com/v1/me/player/play?device_id=" + device,
+             type: "PUT",
+             data: dataString,
+             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + access_token );},
+             success: function(data) {
+               console.log(data)
+             }
+           });
           }
       // --------------------------------------------------------------------------------------
       //
@@ -1235,7 +1256,7 @@
         nextTrackBeat = 0;
         trackBeats = [];
 
-        //toast(trackName, artistName + ' - ' + albumName);
+        toast(trackName, artistName + ' - ' + albumName);
         fetchTrackAnalysis();
       }
 
