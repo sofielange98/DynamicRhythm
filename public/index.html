@@ -149,29 +149,22 @@
             let _token = access_token;
             var playlistInfo;
             $.ajax({
-      					type: "GET",
-      					url: "https://api.spotify.com/v1/me/playlists?limit=50",
-      					headers: { 'Authorization': 'Bearer ' + access_token },
-                beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + access_token );},
-                success: function(data) {
-                  console.log('playlists:',data)
-                  playlistInfo = data["items"];
-      						console.log(playlistInfo);
-      						for (i = 0; i < playlistInfo.length; i++)
-      							{
-      								var p = document.getElementById("user_playlists");
-      								var playlist_name = playlistInfo[i].name;
-      								var playlist_uri = playlistInfo[i].uri;
-      							    console.log(playlist_name + " : " + playlist_uri);
-      							    var new_button = "<button id = '" + playlist_uri + "'class = 'btn btn-default' ondblclick= 'changePlaylist(this)' >"+ playlist_name + "</button>";
-      							    // var li = document.createElement("li");
-      							    // li.setAttribute('id',playlistInfo[i].name + " : " + playlistInfo[i].uri);
-      							    // li.appendChild(document.createTextNode(playlistInfo[i].name + " : " + playlistInfo[i].uri));
-      							    $("#user_playlists").append(new_button);
-      							    // p.appendChild(new_button);
-      							}
-                }
-      					});
+  					type: "GET",
+  					url: "https://api.spotify.com/v1/me/playlists?limit=50",
+  					headers: { 'Authorization': 'Bearer ' + access_token },
+	                beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + access_token );},
+	                success: function(data) {
+	                	playlistInfo = data["items"];
+	  						for (i = 0; i < playlistInfo.length; i++){
+  								var p = document.getElementById("user_playlists");
+  								var playlist_name = playlistInfo[i].name;
+  								var playlist_uri = playlistInfo[i].uri;
+
+  							    var new_button = "<button id = '" + playlist_uri + "'class = 'btn btn-default' ondblclick= 'changePlaylist(this)' >"+ playlist_name + "</button>";
+  							    $("#user_playlists").append(new_button);
+  							}
+	                	}
+      				});
             // Set up the Web Playback SDK
 
             window.onSpotifyPlayerAPIReady = () => {
