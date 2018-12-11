@@ -2,9 +2,7 @@
 <html>
   <head>
     <title>DynamicRhythm</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
     <link rel = "stylesheet" href = "./button.css"/>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" type="text/css" href="./fontawesome/css/font-awesome.min.css" />
@@ -51,7 +49,7 @@
       <div class="playerbar_playbtngroup">
         <div class="btn prev" onclick="sendCommand('POST', 'previous')"><i class="fa fa-step-backward" aria-hidden="true"></i></div>
         <div class="btn play" id = "playbtn"><i class="fa fa-play" aria-hidden="true"></i></div>
-        <div class="btn play" id = "pausebtn"><i class="fa fa-pause" aria-hidden="true"></i></div>
+        <div class="btn play" onclick = "sendCommand('PUT', 'pause')"><i class="fa fa-pause" aria-hidden="true"></i></div>
         <div class="btn next" onclick="sendCommand('POST', 'next')"><i class="fa fa-step-forward" aria-hidden="true"></i></div>
       </div>
       <div class="trackposition" id="trackposition"><div class="fill" id="trackpositionfill"></div>
@@ -176,10 +174,6 @@
               // Connect to the player!
               player.connect();
               document.getElementById("playbtn").addEventListener("click", function(){
-                //console.log(this);
-                player.togglePlay();
-              });
-              document.getElementById("pausebtn").addEventListener("click", function(){
                 //console.log(this);
                 player.togglePlay();
               });
