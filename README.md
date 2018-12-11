@@ -20,6 +20,6 @@ Finally, users can skip to the previous or next song in the current context by u
 
 Clone the repository
 Change into the DynamicRhythm/DynamicRhythm directory
-use node to run app.js, then go to localhost:8888 on Chrome, Firefox, or IE. (NOTE: You must have a PREMIUM Spotify account for this to work)
+use node to run app.js, then go to localhost:8888 on Chrome or Firefox (NOTE: You must have a PREMIUM Spotify account for this to work)
 Login with Spotify, and you should see all your playlists on the left, a song will begin playing, and you can change to any of your playlists.
 The visualizer takes a minute to catch up, so give it time and you should see the album artwork in the middle of the screen.
