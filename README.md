@@ -1,10 +1,10 @@
 ######## Dynamic Rhythm #######
 Our course project for Software Development Methods and Tools, Fall 2018
 
-Our app connects to a users Spotify account and allows them to view this visualizer created by possan ---
+Our app connects to a users Spotify account and allows them to view this visualizer created by possan[https://possan.github.io/webgl-spotify-connect-now-playing-screen-example/#access_token=BQBmzTFYHDNdhAzNXCqwrLvq3d08ufzde2AfY43Zi8IseXw3XzBy7QwWiYwCQBm20gWaAXcTP5hHbEbrnCX3TP6WxlFjtmPkPS6LU6XcIFVo3tUgNgh_B1Us6y13uC77GrWZXeKZue4B2gmozV0JWK79pd9V&token_type=Bearer&expires_in=3600
+https://github.com/possan/webgl-spotify-connect-now-playing-screen-example]
 
-https://possan.github.io/webgl-spotify-connect-now-playing-screen-example/#access_token=BQBmzTFYHDNdhAzNXCqwrLvq3d08ufzde2AfY43Zi8IseXw3XzBy7QwWiYwCQBm20gWaAXcTP5hHbEbrnCX3TP6WxlFjtmPkPS6LU6XcIFVo3tUgNgh_B1Us6y13uC77GrWZXeKZue4B2gmozV0JWK79pd9V&token_type=Bearer&expires_in=3600
-https://github.com/possan/webgl-spotify-connect-now-playing-screen-example
+
 
 while simultaneously manipulating the currently playing music in a player we have created in the browser 
 using Spotify's Web Playback SDK. Users can view all of their playlists and play them by double clicking.
